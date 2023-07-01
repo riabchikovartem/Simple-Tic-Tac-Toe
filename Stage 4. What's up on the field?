@@ -1,0 +1,73 @@
+package tictactoe
+
+import kotlin.math.abs
+
+const val TEAM_X = 'X'
+const val TEAM_O = 'O'
+
+fun main() {
+    val string = readln()
+    println("---------")
+    println("| ${string[0]} ${string[1]} ${string[2]} |")
+    println("| ${string[3]} ${string[4]} ${string[5]} |")
+    println("| ${string[6]} ${string[7]} ${string[8]} |")
+    println("---------")
+    val winnerX = winner(TEAM_X, string)
+    val winnerO = winner(TEAM_O, string)
+    val hasEmpty = hasEmpty(string)
+    val wrongCount = wrongCount(string)
+    when {
+        winnerX && winnerO || wrongCount -> println("Impossible")
+        winnerX -> println("X wins")
+        winnerO -> println("O wins")
+        !hasEmpty -> println("Draw")
+        else -> println("Game not finished")
+    }
+}
+
+fun winner(team:Char, string: String):Boolean {
+    val combinations = mutableListOf(
+        mutableListOf(0, 1, 2),
+        mutableListOf(3, 4, 5),
+        mutableListOf(6, 7, 8),
+        mutableListOf(0, 3, 6),
+        mutableListOf(1, 4, 7),
+        mutableListOf(2, 5, 8),
+        mutableListOf(0, 4, 8),
+        mutableListOf(2, 4, 6)
+    )
+    var result = false
+    for (combination in combinations) {
+        if (team == string[combination[0]]
+            && team == string[combination[1]]
+            && team == string[combination[2]]) {
+            result = true
+        }
+    }
+    return result
+}
+
+fun hasEmpty(string: String):Boolean {
+    var result = false
+    for (char in string) {
+        if (char != TEAM_X && char != TEAM_O) result = true
+    }
+    return result
+}
+
+fun wrongCount(string: String):Boolean {
+    val countX = countChar(TEAM_X, string)
+    val countO = countChar(TEAM_O, string)
+    return when {
+        countX != countO -> abs(countX - countO) > 1
+        else -> false
+    }
+}
+
+fun countChar(team:Char, string: String):Int {
+    var count = 0
+    for (char in string) {
+        if (team == char) count++
+    }
+    return count
+}
