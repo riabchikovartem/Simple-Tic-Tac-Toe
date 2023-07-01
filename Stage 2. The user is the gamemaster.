@@ -1,0 +1,33 @@
+package tictactoe
+
+fun main() {
+    val field = TicTacToeField()
+    field.updateField(readln())
+    field.printField()
+}
+
+class TicTacToeField {
+    private val field = mutableListOf(
+        mutableListOf("", "", ""),
+        mutableListOf("", "", ""),
+        mutableListOf("", "", "")
+    )
+
+    fun printField() {
+        repeat(9) { print("-") }
+        print("\n")
+        for (row in field) {
+            println("| " + row.joinToString(" ") + " |")
+        }
+        repeat(9) { print("-") }
+        print("\n")
+    }
+
+    fun updateField(codeLetters: String) {
+        codeLetters.forEachIndexed { index, c ->
+            if (index in 0..2) field[0][index] = c.toString()
+            if (index in 3..5) field[1][index - 3] = c.toString()
+            if (index in 6..8) field[2][index - 6] = c.toString()
+        }
+    }
+}
